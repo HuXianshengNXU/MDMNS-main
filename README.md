@@ -1,6 +1,6 @@
 # MDMNS: Modal-aware Diffusion-enhanced with Multi-level Negative Sampling for Multimodal-based Recommendation
 
-<img src="./figures/model1.png" style="zoom:100%;" />
+<img src="./figures/framework.png" style="zoom:100%;" />
 
 ## 📝 Environment
 
