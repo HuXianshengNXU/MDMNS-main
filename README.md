@@ -65,12 +65,7 @@ python Main.py --data sports --reg 1e-6 --ssl_reg 1e-2 --temp 0.1 --ris_lambda 0
     │   ├── audio_feat.npy
     │   ├── image_feat.npy
     │   └── text_feat.npy
-    ├── baby
-    │   ├── trnMat.pkl
-    │   ├── tstMat.pkl
-    │   ├── valMat.pkl
-    │   ├── text_feat.npy
-    │   └── image_feat.npy.zip
+    ├── baby.zip
     └── README.md
 ```
 
