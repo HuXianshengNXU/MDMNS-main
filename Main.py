@@ -6,7 +6,6 @@ from DataHandler import DataHandler
 from Utils.TimeLogger import log
 from Params import args
 from Model import Model, GaussianDiffusion, Denoise
-# from DataHandler import DataHandler, rows, cols
 import numpy as np
 from Utils.Utils import *
 import os
@@ -147,10 +146,6 @@ class Coach:
 
             iEmbeds = self.model.getItemEmbeds().detach()
             uEmbeds = self.model.getUserEmbeds().detach()
-            # print(iEmbeds.shape)  # torch.Size([7050, 64])
-            # print(uEmbeds.shape)  # torch.Size([19445, 64])
-            # print("===================")
-            # time.sleep(10)
 
             image_feats = self.model.getImageFeats().detach()
             text_feats = self.model.getTextFeats().detach()
@@ -259,7 +254,7 @@ class Coach:
             i_list_image = np.array(i_list_image)
             edge_list_image = np.array(edge_list_image)
             self.image_UI_matrix = self.buildUIMatrix(u_list_image, i_list_image, edge_list_image)
-            self.image_UI_matrix = self.model.edgeDropper(self.image_UI_matrix)  # # 边丢弃增强（数据增强）
+            self.image_UI_matrix = self.model.edgeDropper(self.image_UI_matrix)
 
             u_list_text = np.array(u_list_text)
             i_list_text = np.array(i_list_text)
@@ -313,13 +308,9 @@ class Coach:
                 bprLoss3 = - (scoreDiff).sigmoid().log().sum() / args.batch
                 bprLoss += bprLoss3
 
-            regLoss = self.model.reg_loss() * args.reg  # L2正则化
+            regLoss = self.model.reg_loss() * args.reg
             loss = bprLoss + regLoss
-
-
-            # epRecLoss += bprLoss1.item()
             epRecLoss += bprLoss.item()
-
             epLoss += loss.item()
 
             if args.data == 'tiktok':
@@ -341,7 +332,6 @@ class Coach:
                                                                                                 poss,
                                                                                                 args.temp)) * args.ssl_reg
             else:
-                # clLoss = (contrastLoss(usrEmbeds_st, usrEmbeds_sv, ancs, args.temp) + contrastLoss(itmEmbeds_st, itmEmbeds_sv, poss, args.temp)) * args.ssl_reg
 
                 clLoss = (contrastLoss(usrEmbeds1, usrEmbeds2, ancs, args.temp) + contrastLoss(itmEmbeds1, itmEmbeds2, poss, args.temp)) * args.ssl_reg
 
@@ -455,15 +445,9 @@ class Coach:
         if args.data == 'tiktok':
             usrEmbeds_svt, itmEmbeds_svt, usrEmbeds_st, itmEmbeds_st, usrEmbeds_sv, itmEmbeds_sv, usrEmbeds_sa, itmEmbeds_sa = self.model.forward_MM(self.handler.torchBiAdj, self.image_UI_matrix,
                                                          self.text_UI_matrix, self.audio_UI_matrix)
-            # itmEmbeds_svt = itmEmbeds_svt + itmEmbeds_sv + itmEmbeds_st + itmEmbeds_sa
-            # usrEmbeds_svt = usrEmbeds_svt + usrEmbeds_sv + usrEmbeds_st + usrEmbeds_sa
         else:
             usrEmbeds_svt, itmEmbeds_svt, usrEmbeds_st, itmEmbeds_st, usrEmbeds_sv, itmEmbeds_sv = self.model.forward_MM(self.handler.torchBiAdj, self.image_UI_matrix,
                                                          self.text_UI_matrix)
-
-            # itmEmbeds_svt = itmEmbeds_svt + itmEmbeds_sv + itmEmbeds_st
-            # usrEmbeds_svt = usrEmbeds_svt + usrEmbeds_sv + usrEmbeds_st
-
 
         for usr, trnMask in tstLoader:
             i += 1
