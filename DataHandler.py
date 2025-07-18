@@ -20,34 +20,13 @@ class DataHandler:
 			predir = './Datasets/sports/'
 		elif args.data == 'tiktok':
 			predir = './Datasets/tiktok/'
-		elif args.data == 'clothing':
-			predir = './Datasets/clothing/'
-		elif args.data == 'MKG-Y':
-			predir = './Datasets/MKG-Y/'
-
-		elif args.data == 'baby_Mentor':
-			predir = './Datasets/baby_Mentor/'
-
-		elif args.data == 'sports_Mentor':
-			predir = './Datasets/sports_Mentor/'
-
 		self.predir = predir
 		self.trnfile = predir + 'trnMat.pkl'
 		self.tstfile = predir + 'tstMat.pkl'
-
 		self.imagefile = predir + 'image_feat.npy'
 		self.textfile = predir + 'text_feat.npy'
 		if args.data == 'tiktok':
 			self.audiofile = predir + 'audio_feat.npy'
-
-	# def loadOneFile(self, filename):
-	# 	with open(filename, 'rb') as fs:
-	#
-	# 		ret = (pickle.load(fs) != 0).astype(np.float32)
-	# 		# ret = pickle.load(fs)
-	# 	if type(ret) != coo_matrix:
-	# 		ret = sp.coo_matrix(ret)
-	# 	return ret
 
 	def loadOneFile(self, filename):
 		with open(filename, 'rb') as fs:
@@ -101,10 +80,6 @@ class DataHandler:
 		if args.data == 'tiktok':
 			self.audio_feats, args.audio_feat_dim = self.loadFeatures(self.audiofile)
 
-		# print(self.trnMat.A.shape)
-		# # print(self.trnMat.B.shape)
-		# print(self.trnMat)
-		# time.sleep(100)
 		self.diffusionData = DiffusionData(torch.FloatTensor(self.trnMat.A))
 		self.diffusionLoader = dataloader.DataLoader(self.diffusionData, batch_size=args.batch, shuffle=True, num_workers=0)
 
@@ -112,14 +87,6 @@ class TrnData(data.Dataset):
 	def __init__(self, coomat):
 		self.rows = coomat.row
 		self.cols = coomat.col
-		# print(type(self.rows))
-		# print(max(self.rows))
-		# args.n_user = max(self.rows)
-		# print(args.n_user)
-		# args.item = max(self.cols)
-		# print(self.rows)
-		# print(self.cols)
-		# time.sleep(1000)
 		self.dokmat = coomat.todok()
 		self.negs = np.zeros(len(self.rows)).astype(np.int32)
 
